@@ -12,7 +12,9 @@ Sample code to demonstrate bulk editing feature on ArcGIS JS API FeatureTable wi
     ```cmd
     yarn install
     ```
-3. Run the following command to run the sample:
+3. Prepare a `.env.local` configuration file in the root directory of this repository.
+4. Follow this [guide](https://developers.arcgis.com/javascript/latest/get-started/) to create an API key and store the key in `.env.local` with the variable: `ARCGIS_DEV_API_KEY`.
+4. Run the following command to run the sample:
     ```cmd
     npm run dev
     ```

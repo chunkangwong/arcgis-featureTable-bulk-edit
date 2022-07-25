@@ -5,8 +5,7 @@ import MapView from "@arcgis/core/views/MapView";
 import FeatureTable from "@arcgis/core/widgets/FeatureTable";
 import "./App.css";
 
-esriConfig.apiKey =
-  "AAPKdf0421a4bc874574bf7b06e46ed18b26N3t8eha3wEC-dmHYDyT16wvyvZDt7H59NhqqjyWE4F292NmBdVgGURmgj2y5f1HE";
+esriConfig.apiKey = import.meta.env.ARCGIS_DEV_API_KEY;
 
 let selectedRows = [];
 
