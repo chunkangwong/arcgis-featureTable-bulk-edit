@@ -1,11 +1,8 @@
-import esriConfig from "@arcgis/core/config";
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
 import Map from "@arcgis/core/Map";
 import MapView from "@arcgis/core/views/MapView";
 import FeatureTable from "@arcgis/core/widgets/FeatureTable";
 import "./App.css";
-
-esriConfig.apiKey = import.meta.env.ARCGIS_DEV_API_KEY;
 
 let selectedRows = [];
 
@@ -34,26 +31,10 @@ const featureTable = new FeatureTable({
 });
 
 // Add or remove selectedRows when a row is selected or deselected
-featureTable.on("selection-change", (event) => {
-  if (event.added.length > 0) {
-    selectedRows = [
-      ...selectedRows,
-      ...event.added.map((addedFeature) => ({
-        attributes: addedFeature.feature.attributes,
-      })),
-    ];
-  }
-  if (event.removed.length > 0) {
-    const removeObjectIDs = event.removed.map(
-      (removedFeature) => removedFeature.objectId
-    );
-    selectedRows = selectedRows.filter(
-      (selectedRow) =>
-        !removeObjectIDs.includes(selectedRow.attributes.ObjectId)
-    );
-  }
-
-  console.log(selectedRows);
+featureTable.on("selection-change", () => {
+  selectedRows = featureTable.grid.selectedItems._items.map(
+    (item) => item.feature
+  );
 });
 
 // Apply attribute edits to the rest of selectedRows
@@ -77,13 +58,14 @@ featureLayer.on("edits", (event) => {
       // Apply the same attribute edit to the rest of the selectedRows
       const applyEditPromise = new Promise((resolve, reject) => {
         updatedKeys.forEach((key, index, array) => {
-          const updateFeatures = [...selectedRows].map((row) => {
+          selectedRows = selectedRows.map((row) => {
             row.attributes[key] = editedFeature.attributes[key];
             return row;
           });
           featureLayer
-            .applyEdits({ updateFeatures })
+            .applyEdits({ updateFeatures: selectedRows })
             .then(() => {
+              console.log("Apply edits success");
               if (index === array.length - 1) {
                 resolve();
               }
@@ -97,6 +79,7 @@ featureLayer.on("edits", (event) => {
       applyEditPromise
         .then(() => {
           featureTable.refresh();
+          console.log("Refreshed");
         })
         .catch((err) => {
           console.log(err);

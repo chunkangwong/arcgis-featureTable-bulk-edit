@@ -12,12 +12,7 @@ Sample code to demonstrate bulk editing feature on ArcGIS JS API FeatureTable wi
     ```cmd
     yarn install
     ```
-3. Prepare a `.env.local` configuration file in the root directory of this repository.
-4. Follow this [guide](https://developers.arcgis.com/javascript/latest/get-started/) to create an API key and store the key in `.env.local` with the variable: `ARCGIS_DEV_API_KEY`. For example:
-    ```
-    ARCGIS_DEV_API_KEY=<your-api-key>
-    ```
-4. Run the following command to run the sample:
+3. Run the following command to run the sample:
     ```cmd
     npm run dev
     ```
@@ -32,6 +27,5 @@ Sample code to demonstrate bulk editing feature on ArcGIS JS API FeatureTable wi
 3. Press "Enter" to save the changes.
 4. Observe the same changes on the rest of the selected rows.
 
-
-## Bug
-There is a bug in this sample code where the feature is not updated in the table consistently.
+## Experimental
+This sample is using FeatureTable.grid.selectedItems._items, an undocumented property to determine the selected rows.
