@@ -28,4 +28,4 @@ Sample code to demonstrate bulk editing feature on ArcGIS JS API FeatureTable wi
 4. Observe the same changes on the rest of the selected rows.
 
 ## Experimental
-This sample is using FeatureTable.grid.selectedItems._items, an undocumented property to determine the selected rows.
+This sample is using `FeatureTable.grid.selectedItems._items`, an undocumented property to determine the selected rows. You may refer to the Esri Community post [here](https://community.esri.com/t5/arcgis-api-for-javascript-questions/featuretable-get-selected-rows/td-p/1158129).
