@@ -32,6 +32,8 @@ const featureTable = new FeatureTable({
 
 // Add or remove selectedRows when a row is selected or deselected
 featureTable.on("selection-change", () => {
+  // FeatureTable.grid.selectedItems._items is a hidden, undocumented property and it is not recommended.
+  // https://community.esri.com/t5/arcgis-api-for-javascript-questions/featuretable-get-selected-rows/td-p/1158129
   selectedRows = featureTable.grid.selectedItems._items.map(
     (item) => item.feature
   );
