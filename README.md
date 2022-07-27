@@ -1,6 +1,6 @@
 # ArcGIS FeatureTable Bulk Edit Feature
 
-Sample code to demonstrate bulk editing feature on ArcGIS JS API FeatureTable widget.
+Sample code to demonstrate the implementation of bulk editing feature on ArcGIS JS API FeatureTable widget.
 
 ## Installation
 1. Clone this repository to your local machine.
