@@ -28,6 +28,7 @@ const featureTable = new FeatureTable({
   layer: featureLayer,
   container: "tableDiv",
   editingEnabled: true,
+  autoRefreshEnabled: true,
 });
 
 // Add or remove selectedRows when a row is selected or deselected
@@ -58,30 +59,16 @@ featureLayer.on("edits", (event) => {
         (key) => editedFeature.attributes[key] !== initalFeature.attributes[key]
       );
       // Apply the same attribute edit to the rest of the selectedRows
-      const applyEditPromise = new Promise((resolve, reject) => {
-        updatedKeys.forEach((key, index, array) => {
-          selectedRows = selectedRows.map((row) => {
-            row.attributes[key] = editedFeature.attributes[key];
-            return row;
-          });
-          featureLayer
-            .applyEdits({ updateFeatures: selectedRows })
-            .then(() => {
-              console.log("Apply edits success");
-              if (index === array.length - 1) {
-                resolve();
-              }
-            })
-            .catch((err) => {
-              reject(err);
-            });
+      selectedRows = selectedRows.map((row) => {
+        updatedKeys.forEach((key) => {
+          row.attributes[key] = editedFeature.attributes[key];
         });
+        return row;
       });
-      // Refresh featureTable once all edits are applied
-      applyEditPromise
-        .then(() => {
-          featureTable.refresh();
-          console.log("Refreshed");
+      featureLayer
+        .applyEdits({ updateFeatures: selectedRows })
+        .then((res) => {
+          console.log(res);
         })
         .catch((err) => {
           console.log(err);
