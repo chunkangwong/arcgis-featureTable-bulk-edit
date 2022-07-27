@@ -46,7 +46,8 @@ featureLayer.on("edits", (event) => {
   if (
     event.edits &&
     event.edits.updateFeatures.length === 1 &&
-    event.edits.updateFeatures[0].attributes.GlobalID
+    event.edits.updateFeatures[0].attributes.GlobalID &&
+    selectedRows.length > 1
   ) {
     const editedFeature = event.edits.updateFeatures[0];
     // Find the previous version of the edited feature
@@ -59,11 +60,10 @@ featureLayer.on("edits", (event) => {
         (key) => editedFeature.attributes[key] !== initalFeature.attributes[key]
       );
       // Apply the same attribute edit to the rest of the selectedRows
-      selectedRows = selectedRows.map((row) => {
+      selectedRows.forEach((row) => {
         updatedKeys.forEach((key) => {
           row.attributes[key] = editedFeature.attributes[key];
         });
-        return row;
       });
       featureLayer
         .applyEdits({ updateFeatures: selectedRows })
