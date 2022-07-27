@@ -5,6 +5,7 @@ import FeatureTable from "@arcgis/core/widgets/FeatureTable";
 import "./App.css";
 
 let selectedRows = [];
+let isSet = false;
 
 const featureLayer = new FeatureLayer({
   url: "https://services2.arcgis.com/GrCObcYo81O3Ymu8/arcgis/rest/services/HDB_Car_Park_Location/FeatureServer/0",
@@ -38,41 +39,15 @@ featureTable.on("selection-change", () => {
   selectedRows = featureTable.grid.selectedItems._items.map(
     (item) => item.feature
   );
-});
-
-// Apply attribute edits to the rest of selectedRows
-featureLayer.on("edits", (event) => {
-  // Check if the edit is from user input rather than the subsequent bulk row update
-  if (
-    event.edits &&
-    event.edits.updateFeatures.length === 1 &&
-    event.edits.updateFeatures[0].attributes.GlobalID &&
-    selectedRows.length > 1 // Also check if the user has selected more than one row or otherwise it would result in endless loop of applyEdits
-  ) {
-    const editedFeature = event.edits.updateFeatures[0];
-    // Find the previous version of the edited feature
-    const initalFeature = selectedRows.find(
-      (row) => row.attributes.ObjectId === editedFeature.attributes.ObjectId
-    );
-    if (initalFeature) {
-      // Find the updated attributes of the edited feature
-      const updatedKeys = Object.keys(editedFeature.attributes).filter(
-        (key) => editedFeature.attributes[key] !== initalFeature.attributes[key]
-      );
-      // Apply the same attribute edit to the rest of the selectedRows
-      selectedRows.forEach((row) => {
-        updatedKeys.forEach((key) => {
-          row.attributes[key] = editedFeature.attributes[key];
+  if (!isSet) {
+    featureTable.columns.items.forEach((item) => {
+      item.on("value-change", (event) => {
+        const field = event.column.__data.path;
+        selectedRows.forEach((row) => {
+          row.attributes[field] = event.value;
         });
       });
-      featureLayer
-        .applyEdits({ updateFeatures: selectedRows })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    });
+    isSet = true;
   }
 });
