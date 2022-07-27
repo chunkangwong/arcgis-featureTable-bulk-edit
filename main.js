@@ -47,7 +47,7 @@ featureLayer.on("edits", (event) => {
     event.edits &&
     event.edits.updateFeatures.length === 1 &&
     event.edits.updateFeatures[0].attributes.GlobalID &&
-    selectedRows.length > 1
+    selectedRows.length > 1 // Also check if the user has selected more than one row or otherwise it would result in endless loop of applyEdits
   ) {
     const editedFeature = event.edits.updateFeatures[0];
     // Find the previous version of the edited feature
