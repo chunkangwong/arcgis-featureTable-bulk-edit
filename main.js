@@ -40,13 +40,15 @@ featureTable.on("selection-change", () => {
     (item) => item.feature
   );
   if (!isSet) {
-    featureTable.columns.items.forEach((item) => {
-      item.on("value-change", (event) => {
-        const field = event.column.__data.path;
-        selectedRows.forEach((row) => {
-          row.attributes[field] = event.value;
+    featureTable.columns.items.forEach((column) => {
+      if (column.editable && column.editingEnabled) {
+        column.on("value-change", (event) => {
+          const field = event.column.__data.path;
+          selectedRows.forEach((row) => {
+            row.attributes[field] = event.value;
+          });
         });
-      });
+      }
     });
     isSet = true;
   }
